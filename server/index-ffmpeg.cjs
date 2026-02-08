@@ -21,8 +21,10 @@ function convertToWav(buffer, inputMimeType) {
     inputStream.push(buffer);
     inputStream.push(null);
     const outputPath = path.join(__dirname, 'temp_' + Date.now() + '.wav');
+    // Only use the main format (e.g., 'webm'), ignore codecs info
+    const format = inputMimeType.split('/')[1].split(';')[0];
     ffmpeg(inputStream)
-      .inputFormat(inputMimeType.split('/')[1])
+      .inputFormat(format)
       .audioCodec('pcm_s16le')
       .format('wav')
       .on('end', () => {
